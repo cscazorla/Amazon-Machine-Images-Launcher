@@ -10,10 +10,10 @@ angular.module('amilauncherApp', [])
 
     // List of available AMIs
     $scope.amis = [
-      {name:'WordPress 4.3.1-0 (64-bit)', ebs:'ami-b73d4bd2'},
-      {name:'WordPress 4.3.1-0 (32-bit)', ebs:'ami-bf3d4bda'},
-      {name:'WordPress Multisite 4.3.1-0 (64-bit)', ebs:'ami-db3e48be'},
-      {name:'WordPress Multisite 4.3.1-0 (32-bit)', ebs:'ami-df3e48ba'}
+      {name:'Bitnami WordPress 4.3.1-0 (64-bit)', ebs:'ami-b73d4bd2'},
+      {name:'Bitnami WordPress 4.3.1-0 (32-bit)', ebs:'ami-bf3d4bda'},
+      {name:'Bitnami WordPress Multisite 4.3.1-0 (64-bit)', ebs:'ami-db3e48be'},
+      {name:'Bitnami WordPress Multisite 4.3.1-0 (32-bit)', ebs:'ami-df3e48ba'}
     ];
 
     // Array with current deployed instances
