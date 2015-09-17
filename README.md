@@ -1,5 +1,5 @@
 # AMI Launcher
-Proof of concept of [AWS SDK for JavaScript](https://aws.amazon.com/es/sdk-for-browser/) in the Browser and AngularJS.
+Proof of concept of [AWS SDK for JavaScript in the Browser](https://aws.amazon.com/es/sdk-for-browser/)  and [AngularJS](https://angularjs.org/).
 
 ## Installation
 There are no dependencies in the project. Both AngularJS and Bootstrap are loaded via CDN.
