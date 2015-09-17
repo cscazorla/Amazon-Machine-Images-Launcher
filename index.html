@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="amilauncherApp">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" type="image/x-icon" href="http://cscazorla.es/images/favicon.ico" />
+  <title>AMI Launcher</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/simplex/bootstrap.min.css" rel="stylesheet">
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.2.2.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+  <script src="controller.js"></script>
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="container-fluid" ng-controller="amilauncherController as amilauncher">
+    <h1 class="page-header">Amazon Cloud Launcher</h1>
+    <div class="alert alert-warning" ng-show="alertVisible">
+      <button type="button" class="close" data-ng-click="switchBool('alertVisible')" >×</button>
+      {{textAlert}}
+    </div>
+    <div class="row">
+      <div class="col-lg-2">
+        <div class="panel panel-default">
+          <div class="panel-heading">Setup AWS Credentials</div>
+          <div class="panel-body">
+              <div class="form-group">
+                <label class="">Access Key ID</label>
+                <input type="text" class="form-control" ng-model="config.accessKeyId">
+              </div>
+              <div class="form-group">
+                <label class="">Secret Access Key</label>
+                <input type="text" class="form-control" ng-model="config.secretAccessKey">
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-sm" ng-click="instancesReload()">Connect</button>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">Available Amazon Machine Images</div>
+          <div class="panel-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>EBS</th>
+                  <th>Name</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="ami in amis">
+                  <td>{{ami.ebs}}</td>
+                  <td>{{ami.name}}</td>
+                  <td><button class="btn btn-xs btn-info" ng-click="deployAMI(ami.ebs)">Deploy</button></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <label for="">Add new AMI to the catalogue:</label>
+            <form class="new-ami">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <input class="form-control" type="text" ng-model="aminame" placeholder="Name" />
+                  </div>
+                  <div class="col-lg-6">
+                    <input class="form-control" type="text" ng-model="amiebs" placeholder="EBS" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary" ng-click="addAMI()">Add</button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Deployed instances</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Launched at</th>
+                <th>Instance Id</th>
+                <th>Instance Type</th>
+                <th>Image Id</th>
+                <th>Instance State</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="instance in instances | orderBy:'LaunchTime'">
+                <td>{{instance.LaunchTime | date:"MM/dd/yyyy HH:mm"}}</td>
+                <td>{{instance.InstanceId}}</td>
+                <td>{{instance.InstanceType}}</td>
+                <td>{{instance.ImageId}}</td>
+                <td ng-class="getInstanceStateClass(instance)">
+                  {{instance.State.Name}}
+                </td>
+                <td>
+                  <a ng-hide="isInstanceTerminated(instance)" class="btn btn-xs btn-danger" ng-click="deleteInstance(instance.InstanceId)">Delete</a>
+                  <a ng-show="isInstanceRunning(instance)" class="btn btn-xs btn-info" target="_blank" href="http://{{instance.PublicDnsName}}">Go!</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
